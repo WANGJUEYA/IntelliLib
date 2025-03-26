@@ -73,12 +73,18 @@ def parse_md_to_sql(md_file_path, sql_file_path):
                     continue
 
                 code, name = parts[0], sanitize_sql_value(parts[1])
+                desc = ''
+                if '#' in name:
+                    name_split = name.split('#')
+                    name = name_split[0].strip()
+                    desc = name_split[1].strip()
+
                 current_hierarchy = [code]
                 parent_stack = [None]
 
                 # 生成单行INSERT语句
                 sql = f"""INSERT INTO CHINESE_LIBRARY_CLASSIFICATION (CODE, PARENT_CODE, NAME, NAME_EN, DESCRIPTION) 
-VALUES ('{code}', NULL, '{name}', '', '');\n"""
+VALUES ('{code}', NULL, '{name}', '', '{desc}');\n"""
                 sql_file.write(sql)
 
             # 处理列表项 (*)
@@ -94,6 +100,11 @@ VALUES ('{code}', NULL, '{name}', '', '');\n"""
                 raw_code, raw_name = parts[0], parts[1]
                 code = raw_code.strip()
                 name = sanitize_sql_value(raw_name.strip())
+                desc = ''
+                if '#' in name:
+                    name_split = name.split('#')
+                    name = name_split[0].strip()
+                    desc = name_split[1].strip()
 
                 # 维护层级关系
                 if level >= len(parent_stack):
@@ -107,7 +118,7 @@ VALUES ('{code}', NULL, '{name}', '', '');\n"""
 
                 # 生成单行INSERT语句
                 sql = f"""INSERT INTO CHINESE_LIBRARY_CLASSIFICATION  (CODE, PARENT_CODE, NAME, NAME_EN, DESCRIPTION)
-VALUES ('{code}', '{parent_code}', '{name}', '', '');\n"""
+VALUES ('{code}', '{parent_code}', '{name}', '', '{desc}');\n"""
                 if code in exist_codes:
                     print(f'''重复元素: {code}''')
                 exist_codes.add(code)
