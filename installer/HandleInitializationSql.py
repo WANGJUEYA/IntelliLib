@@ -184,7 +184,7 @@ if __name__ == "__main__":
 
     # 生成插入语句
     parse_md_to_sql(
-        md_file_path="library_classification/中国图书馆分类法（第5版）.md",
+        md_file_path="library_classification/中国图书馆分类法（第5版）.txt",
         sql_file_path="library_classification_insert.sql"
     )
     print("生成插入语句成功！")
@@ -197,7 +197,7 @@ if __name__ == "__main__":
 
     ## 更新英文名
     generate_en_updates(
-        md_file_path="library_classification/Library_of_Congress_Classification.md",
+        md_file_path="library_classification/Library_of_Congress_Classification.txt",
         sql_file_path="library_classification_update_en.sql"
     )
     print("生成更新语句成功！")
